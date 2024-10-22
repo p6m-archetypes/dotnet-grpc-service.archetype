@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  crdb:
+    image: cockroachdb/cockroach:v22.1.0
+    ports:
+      - "26257:26257"
+      #- "8090:8080"
+    command: start-single-node --insecure
+    restart: unless-stopped
+    # volumes:
+    #   - "crdb_volume:/cockroach/cockroach-data"
+
+  # localstack:
+  #   container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+  #   image: localstack/localstack:0.14.2
+  #   ports:
+  #     - "127.0.0.1:4566:4566"            # LocalStack Gateway
+  #     - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+  #   environment:
+  #     - SERVICES=${LOCALSTACK_SERVICES:-s3,sqs}
+  #     # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+  #     - DEBUG=${DEBUG:-0}
+  #     - DATA_DIR=${LOCALSTACK_DATA_DIR:-/tmp/localstack/data}
+  #   volumes:
+  #     - "localstack_volume:/var/lib/localstack"
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #     - "./localstack:/docker-entrypoint-initaws.d"
+  #     - "localstack_volume:/tmp/localstack/data"
+
+# volumes:
+#   crdb_volume:
+#   localstack_volume:
+  
+networks:
+  service-net:
+

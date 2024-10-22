@@ -1,0 +1,43 @@
+
+{% macro rpc_calls(entity_key, entity, model) -%}
+    rpc Create{{ entity_key | pascal_case }} ({{ entity_key | pascal_case }}Dto) returns (Create{{ entity_key | pascal_case }}Response);
+    rpc Get{{ entity_key | pascal_case | pluralize }} (Get{{ entity_key | pascal_case | pluralize }}Request) returns (Get{{ entity_key | pascal_case | pluralize }}Response);
+    rpc Get{{ entity_key | pascal_case }} (Get{{ entity_key | pascal_case }}Request) returns (Get{{ entity_key | pascal_case }}Response);
+    rpc Update{{ entity_key | pascal_case }} ({{ entity_key | pascal_case }}Dto) returns (Update{{ entity_key | pascal_case }}Response);{%- endmacro %}
+
+{% macro dtos(entity_key, entity, model) -%}
+message {{ entity_key | pascal_case }}Dto {
+    google.protobuf.StringValue id = 1;
+    string name = 2;
+}
+
+message Get{{ entity_key | pascal_case }}Request {
+    string id = 1;
+}
+
+message Get{{ entity_key | pascal_case }}Response {
+        {{ entity_key | pascal_case }}Dto {{ entity_key | snake_case }} = 1;
+}
+
+message Get{{ entity_key | pascal_case | pluralize }}Request {
+    int32 start_page = 1;
+    int32 page_size = 2;
+}
+
+message Get{{ entity_key | pascal_case | pluralize }}Response {
+    repeated {{ entity_key | pascal_case }}Dto {{ entity_key | camel_case | pluralize }} = 1;
+    bool has_next = 2;
+    bool has_previous = 3;
+    int32 next_page = 4;
+    int32 previous_page = 5;
+    int32 total_pages = 6;
+    int64 total_elements = 7;
+}
+
+message Update{{ entity_key | pascal_case }}Response {
+    {{ entity_key | pascal_case }}Dto {{ entity_key | snake_case }} = 1;
+}
+
+message Create{{ entity_key | pascal_case }}Response {
+    {{ entity_key | pascal_case }}Dto {{ entity_key | snake_case }} = 1;
+}{%- endmacro %}

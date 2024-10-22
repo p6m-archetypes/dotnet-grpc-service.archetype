@@ -1,0 +1,21 @@
+{% import "macros/protobuf" as protobuf %}
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "{{ root_package }}.grpc.v1";
+option java_outer_classname = "{{ ProjectPrefix }}Stubs";
+
+option csharp_namespace = "{{ ProjectName }}.API";
+
+package {{ root_package }}.grpc.v1;
+
+import "google/protobuf/wrappers.proto";
+
+service {{ ProjectPrefix }}{{ ProjectSuffix }} {
+{%- for entity_key in model.entities %}
+    {{ protobuf.rpc_calls(entity_key, model.entities[entity_key], model)}}{% endfor %}
+}
+
+{% for entity_key in model.entities %}
+{{ protobuf.dtos(entity_key, model.entities[entity_key], model)}}
+{% endfor %}

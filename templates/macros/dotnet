@@ -1,0 +1,136 @@
+
+{% macro api_interface_methods(entity_key, entity, model) -%}
+    Task<Create{{ entity_key | pascal_case }}Response> Create{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto {{ entity_key | camel_case }});
+    Task<Get{{ entity_key | pascal_case | pluralize }}Response> Get{{ entity_key | pascal_case | pluralize }}(Get{{ entity_key | pascal_case | pluralize }}Request request);
+    Task<Get{{ entity_key | pascal_case }}Response> Get{{ entity_key | pascal_case }}(Get{{ entity_key | pascal_case }}Request request);
+    Task<Update{{ entity_key | pascal_case }}Response> Update{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto {{ entity_key | camel_case }});
+{%- endmacro %}
+
+
+{% macro core_persistence_imports(entity_key, entity, model) -%}
+import {{ root_package }}.persistence.entities.{{ entity_key | pascal_case }}Entity;
+import {{ root_package }}.persistence.repositories.{{ entity_key | pascal_case }}Repository;
+{%- endmacro %}
+
+
+{% macro core_persistence_constructor_arg(entity_key, entity, model) -%}
+final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repository
+{%- endmacro %}
+
+
+{% macro core_persistence_fields() -%}
+{%- if persistence != 'None' %}
+    {%- for entity_key in model.entities -%}
+    private readonly {{ entity_key | pascal_case }}Repository _{{ entity_key | camel_case }}Repository;
+    {% endfor %}
+{%- endif %}
+{%- endmacro %}
+
+
+{% macro core_persistence_constructor_args() -%}
+{%- if persistence != 'None' %}
+    {%- for entity_key in model.entities %}
+        {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repository{% if not loop.last%}, {% endif %}
+    {%- endfor %}
+{%- endif %}
+{%- endmacro %}
+
+
+{% macro core_persistence_constructor_assignments() -%}
+{%- if persistence != 'None' %}
+    {%- for entity_key in model.entities %}
+        _{{ entity_key | camel_case }}Repository =  {{ entity_key | camel_case }}Repository;{% endfor %}
+{%- endif %}
+{%- endmacro %}
+
+
+{% macro core_implementation_methods(entity_key, entity, model) -%}
+    public async Task<Create{{ entity_key | pascal_case }}Response> Create{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto request)
+    {{'{'}}{% if persistence != 'None' %}
+        var {{ entity_key | camel_case }} = new {{ entity_key | pascal_case }}Entity
+        {
+            Name = request.Name
+        };
+
+        await _{{ entity_key | camel_case }}Repository.SaveAsync({{ entity_key | camel_case }});
+        
+        return new Create{{ entity_key | pascal_case }}Response
+        {
+            {{ entity_key | pascal_case }} = new {{ entity_key | pascal_case }}Dto
+            {
+                Id = {{ entity_key | camel_case }}.Id.ToString(),
+                Name = {{ entity_key | camel_case }}.Name
+            }
+        };{% endif %}
+    }
+
+    public async Task<Get{{ entity_key | pascal_case | pluralize }}Response> Get{{ entity_key | pascal_case | pluralize }}(Get{{ entity_key | pascal_case | pluralize }}Request request)
+    {{'{'}}{% if persistence != 'None' %}
+        var startPage = Math.Max(1, request.StartPage);
+        var pageSize = Math.Max(Math.Min(request.PageSize, 100), 1);
+        PageRequest pageRequest = new PageRequest
+        {
+            PageSize = pageSize,
+            StartPage = startPage
+        };
+        
+        var page = await _{{ entity_key | camel_case }}Repository.FindAsync(pageRequest);
+
+        var response = new Get{{ entity_key | pascal_case | pluralize }}Response
+        {
+            TotalElements = page.TotalElements,
+            TotalPages = (int)page.TotalElements / pageSize
+        };
+        response.{{ entity_key | pascal_case | pluralize }}.AddRange(page.Items.Select({{ entity_key | camel_case }} => new {{ entity_key | pascal_case }}Dto
+        {
+            Id = {{ entity_key | camel_case }}.Id.ToString(),
+            Name = {{ entity_key | camel_case }}.Name
+        }));
+
+        return response;{% else %}
+        return new Get{{ entity_key | pascal_case | pluralize }}Response();{% endif %}
+    }
+
+    public async Task<Get{{ entity_key | pascal_case }}Response> Get{{ entity_key | pascal_case }}(Get{{ entity_key | pascal_case }}Request request)
+    {{'{'}}{% if persistence != 'None' %}
+        var {{ entity_key | camel_case }} = await _{{ entity_key | camel_case }}Repository.FindByIdAsync(Guid.Parse(request.Id));
+        if ({{ entity_key | camel_case }} == null)
+        {
+            throw new RpcException(new Status(StatusCode.NotFound, "{{ entity_key | pascal_case }} not found"));
+        }
+
+        return new Get{{ entity_key | pascal_case }}Response
+        {
+            {{ entity_key | pascal_case }} = new {{ entity_key | pascal_case }}Dto
+            {
+                Id = {{ entity_key | camel_case }}.Id.ToString(),
+                Name = {{ entity_key | camel_case }}.Name
+            }
+        };{% else %}
+        return new Get{{ entity_key | pascal_case }}Response();{% endif %}
+    }
+
+    public async Task<Update{{ entity_key | pascal_case }}Response> Update{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto {{ entity_key | camel_case }})
+    {{'{'}}{% if persistence != 'None' %}
+        var entity = await _{{ entity_key | camel_case }}Repository.FindByIdAsync(Guid.Parse({{ entity_key | camel_case }}.Id));
+        if (entity == null)
+        {
+            throw new RpcException(new Status(StatusCode.NotFound, "{{ entity_key | pascal_case }} not found"));
+        }
+
+        entity.Name = {{ entity_key | camel_case }}.Name;
+
+        await _{{ entity_key | camel_case }}Repository.UpdateAsync(entity);
+
+        return new Update{{ entity_key | pascal_case }}Response
+        {
+            {{ entity_key | pascal_case }} = new {{ entity_key | pascal_case }}Dto
+            {
+                Id = entity.Id.ToString(),
+                Name = entity.Name
+            }
+        };{% else %}
+        return new Update{{ entity_key | pascal_case }}Response();{% endif %}
+    }
+
+{%- endmacro %}
