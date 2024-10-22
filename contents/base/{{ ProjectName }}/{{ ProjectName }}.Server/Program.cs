@@ -1,7 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+{% if persistence != 'None' %}using Microsoft.EntityFrameworkCore;{% endif %}
 using {{ ProjectName }}.Core;
+{% if persistence != 'None' %}
 using {{ ProjectName }}.Persistence.Context;
-using {{ ProjectName }}.Persistence.Repositories;
+using {{ ProjectName }}.Persistence.Repositories;{% endif %}
 using {{ ProjectName }}.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ builder.Services.AddGrpcReflection();
 
 builder.Services.AddScoped<{{ ProjectName }}Core>();
 
-
+{% if persistence != 'None' %}
 //Configure Repositories and DBContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("CockroachDBConnection")));
@@ -21,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {%- set EntityName = entity_key | pascal_case -%}
 {%- set entityName = entity_key | camel_case %}
 builder.Services.AddScoped<{{ EntityName }}Repository, {{ EntityName }}Repository>();
-{% endfor %}
+{% endfor %}{% endif %}
 
 
 var app = builder.Build();

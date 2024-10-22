@@ -11,8 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ ProjectName }}.Core", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ ProjectName }}.Server", "{{ ProjectName }}.Server\{{ ProjectName }}.Server.csproj", "{AF0CC9A2-27E2-43AE-A784-E95CBA9977F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ ProjectName }}.Persistence", "{{ ProjectName }}.Persistence\{{ ProjectName }}.Persistence.csproj", "{94244333-98D8-444C-B432-E88F672EC427}"
-EndProject
+{% if persistence != 'None' %}Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ ProjectName }}.Persistence", "{{ ProjectName }}.Persistence\{{ ProjectName }}.Persistence.csproj", "{94244333-98D8-444C-B432-E88F672EC427}"
+EndProject{% endif %}
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ ProjectName }}.IntegrationTests", "{{ ProjectName }}.IntegrationTests\{{ ProjectName }}.IntegrationTests.csproj", "{5A6ED28E-D8B6-4C69-8695-52E3B45CE49C}"
 EndProject
 Global

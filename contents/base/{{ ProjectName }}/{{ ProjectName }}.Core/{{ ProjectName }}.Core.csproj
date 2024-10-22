@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\{{ ProjectName }}.API\{{ ProjectName }}.API.csproj" />
-    <ProjectReference Include="..\{{ ProjectName }}.Persistence\{{ ProjectName }}.Persistence.csproj" />
+    {% if persistence != 'None' %}<ProjectReference Include="..\{{ ProjectName }}.Persistence\{{ ProjectName }}.Persistence.csproj" />{% endif %}
   </ItemGroup>
 
   <PropertyGroup>

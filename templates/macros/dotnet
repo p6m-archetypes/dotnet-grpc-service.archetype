@@ -7,9 +7,10 @@
 {%- endmacro %}
 
 
-{% macro core_persistence_imports(entity_key, entity, model) -%}
-import {{ root_package }}.persistence.entities.{{ entity_key | pascal_case }}Entity;
-import {{ root_package }}.persistence.repositories.{{ entity_key | pascal_case }}Repository;
+{% macro core_persistence_imports() -%}
+using {{ ProjectName }}.Persistence.Entities;
+using {{ ProjectName }}.Persistence.Models;
+using {{ ProjectName }}.Persistence.Repositories;
 {%- endmacro %}
 
 
@@ -61,7 +62,8 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
                 Id = {{ entity_key | camel_case }}.Id.ToString(),
                 Name = {{ entity_key | camel_case }}.Name
             }
-        };{% endif %}
+        };{% else %}
+        return new Create{{ entity_key | pascal_case }}Response();{% endif %}
     }
 
     public async Task<Get{{ entity_key | pascal_case | pluralize }}Response> Get{{ entity_key | pascal_case | pluralize }}(Get{{ entity_key | pascal_case | pluralize }}Request request)

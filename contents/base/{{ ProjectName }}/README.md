@@ -50,7 +50,7 @@ Get{{ ProjectPrefix }}s
 grpcurl -plaintext -d '{"start_page": "1", "page_size": "5"}' localhost:{{ service-port }} \
     {{ root_package }}.grpc.v1.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix }}s
 ```
-
+{% if persistence != 'None' %}
 ## DB migrations
 ### Create DB Migration
 ```bash
@@ -61,6 +61,7 @@ dotnet ef migrations add InitialCreation  --project {{ ProjectName }}.Persistenc
 ```bash
 dotnet ef database update --project {{ ProjectName }}.Persistence -s {{ ProjectName }}.Server
 ```
+{% endif %}
 
 ## Local
 Run Database dependencies with `docker-compose`
@@ -68,7 +69,7 @@ Run Database dependencies with `docker-compose`
 docker-compose up -d
 ```
 
-From the project root, install then run the server:
+From the project root, run the server:
 ```bash
 dotnet run --project {{ ProjectName }}.Server
 ```
