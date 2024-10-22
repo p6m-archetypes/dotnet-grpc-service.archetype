@@ -29,20 +29,11 @@ For a list of all derived properties and examples of the property relationships,
 
 ## What's Inside
 
-This archetype is based on the [SpringBoot](https://spring.io/projects/spring-boot) framework and uses [Maven](https://maven.apache.org/)
-as its build system.
-
 Features include:
 
-- Out-of-the box [endpoints](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints), including
-  `/health`, `/info`, `/metrics`, `/env`, `/liquibase`, and `/threaddump`.
-- [Hibernate](https://hibernate.org/) for ORM
-- [Liquibase](https://www.liquibase.org/) for changeset management
 - Simple CRUD over [gRPC](https://grpc.io/)
 - gRPC stub publication based on the project name
-- Example GitLab CI configuration
 - Docker image publication to artifactory
 - Load tests using [k6](https://k6.io/) for both HTTP and gRPC calls
 - Application configuration through property files, environment variables, and CLI arguments.
 - Integration with [Tilt](https://tilt.dev/) to support local k8s development
-- Out-of-the-box Postgres and [LocalStack](https://github.com/localstack/localstack) using [Test Containers](https://www.testcontainers.org/)
