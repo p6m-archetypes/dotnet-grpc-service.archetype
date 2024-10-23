@@ -30,7 +30,8 @@ For a list of all derived properties and examples of the property relationships,
 ## What's Inside
 
 Features include:
-
+- Entity Framework Core [EF](https://learn.microsoft.com/en-us/ef/core/)
+- Testcontainers .NET (https://dotnet.testcontainers.org/)
 - Simple CRUD over [gRPC](https://grpc.io/)
 - gRPC stub publication based on the project name
 - Docker image publication to artifactory

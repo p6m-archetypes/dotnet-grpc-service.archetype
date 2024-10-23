@@ -11,7 +11,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Protobuf Include="Protos\{{ project-prefix }}-{{ project-suffix}}_v1.proto" />
+    <Protobuf Include="Protos\{{ project-prefix }}-{{ project-suffix}}.proto" />
   </ItemGroup>
 
 </Project>

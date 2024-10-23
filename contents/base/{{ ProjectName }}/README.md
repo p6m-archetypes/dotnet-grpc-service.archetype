@@ -43,12 +43,12 @@ For example,
 Create{{ ProjectPrefix }}
 ```bash
 grpcurl -plaintext -d '{"name": "test"}' localhost:{{ service-port }} \
-    {{ root_package }}.grpc.v1.{{ ProjectPrefix }}{{ ProjectSuffix }}/Create{{ ProjectPrefix }}
+    {{ root_package }}.grpc.{{ ProjectPrefix }}{{ ProjectSuffix }}/Create{{ ProjectPrefix }}
 ```
 Get{{ ProjectPrefix }}s
 ```bash
 grpcurl -plaintext -d '{"start_page": "1", "page_size": "5"}' localhost:{{ service-port }} \
-    {{ root_package }}.grpc.v1.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix }}s
+    {{ root_package }}.grpc.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix }}s
 ```
 {% if persistence != 'None' %}
 ## DB migrations

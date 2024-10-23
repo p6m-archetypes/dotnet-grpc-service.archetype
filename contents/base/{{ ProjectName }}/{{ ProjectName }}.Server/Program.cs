@@ -1,35 +1,8 @@
-{% if persistence != 'None' %}using Microsoft.EntityFrameworkCore;{% endif %}
-using {{ ProjectName }}.Core;
-{% if persistence != 'None' %}
-using {{ ProjectName }}.Persistence.Context;
-using {{ ProjectName }}.Persistence.Repositories;{% endif %}
-using {{ ProjectName }}.Server.Services;
+using {{ ProjectName }}.Server;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddGrpc();
-builder.Services.AddGrpcReflection();
-
-builder.Services.AddScoped<{{ ProjectName }}Core>();
-
-{% if persistence != 'None' %}
-//Configure Repositories and DBContext
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("CockroachDBConnection")));
-
-{%- for entity_key in model.entities -%}
-{%- set EntityName = entity_key | pascal_case -%}
-{%- set entityName = entity_key | camel_case %}
-builder.Services.AddScoped<{{ EntityName }}Repository, {{ EntityName }}Repository>();
-{% endfor %}{% endif %}
-
-
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services);
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-app.MapGrpcReflectionService().AllowAnonymous();
-app.MapGrpcService<{{ ProjectName }}GrpcImpl>();
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-
+startup.Configure(app);
 app.Run();
