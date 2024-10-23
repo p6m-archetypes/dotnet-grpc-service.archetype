@@ -54,7 +54,8 @@ public class Startup
         {%- set entityName = entity_key | camel_case %}
         services.AddScoped<{{ EntityName }}Repository, {{ EntityName }}Repository>();
         {% endfor %}{% endif %}
-
+        
+        services.AddHealthChecks();
     }
         
         
@@ -71,6 +72,7 @@ public class Startup
         // Configure the HTTP request pipeline.
         app.MapGrpcReflectionService().AllowAnonymous();
         app.MapGrpcService<{{ ProjectName }}GrpcImpl>();
-        app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client");
+        app.MapGet("/", () => "{{ ProjectName }}");
+        app.MapHealthChecks("/health");
     }
 }

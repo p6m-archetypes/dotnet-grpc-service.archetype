@@ -5,10 +5,11 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:{{ service-port }}",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "TEMP_DB": "true"
+        "TEMP_DB": "true",
+        "Kestrel__Endpoints__Grpc__Url": "http://localhost:{{ service-port }}",
+        "Kestrel__Endpoints__Http__Url": "http://localhost:{{ management-port }}"
       }
     }
   }
