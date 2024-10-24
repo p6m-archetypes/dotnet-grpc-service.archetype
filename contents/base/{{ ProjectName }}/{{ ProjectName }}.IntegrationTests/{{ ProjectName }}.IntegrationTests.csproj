@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\{{ ProjectName }}.Client\{{ ProjectName }}.Client.csproj" />
+    <ProjectReference Include="..\{{ ProjectName }}.Server\{{ ProjectName }}.Server.csproj" />
   </ItemGroup>
 
 </Project>
