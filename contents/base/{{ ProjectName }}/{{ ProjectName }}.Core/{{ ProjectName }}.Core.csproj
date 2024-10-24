@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>{{ ProjectName }}.Core</PackageId>
+    <Version>1.0.0</Version>
+    <Description>{{ project-title }} :: Core</Description>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\{{ ProjectName }}.API\{{ ProjectName }}.API.csproj" />
     {% if persistence != 'None' %}<ProjectReference Include="..\{{ ProjectName }}.Persistence\{{ ProjectName }}.Persistence.csproj" />{% endif %}
   </ItemGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
 </Project>
