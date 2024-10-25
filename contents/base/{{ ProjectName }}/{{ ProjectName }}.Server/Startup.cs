@@ -1,3 +1,4 @@
+using System.Text.Json;
 {% if persistence != 'None' %}using Microsoft.EntityFrameworkCore;{% endif %}
 using {{ ProjectName }}.Core;
 using Testcontainers.CockroachDb;
@@ -5,6 +6,7 @@ using Testcontainers.CockroachDb;
 using {{ ProjectName }}.Persistence.Context;
 using {{ ProjectName }}.Persistence.Repositories;{% endif %}
 using {{ ProjectName }}.Server.Services;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 
 namespace {{ ProjectName }}.Server;
@@ -55,7 +57,12 @@ public class Startup
         services.AddScoped<{{ EntityName }}Repository, {{ EntityName }}Repository>();
         {% endfor %}{% endif %}
         
-        services.AddHealthChecks();
+        services.AddHealthChecks(){% if persistence != 'None' %}
+            .AddNpgSql(connectionString,
+                name: "cockroachdb",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["db", "cockroachdb", "sql"]
+            ){% endif %};
     }
         
         
@@ -73,6 +80,25 @@ public class Startup
         app.MapGrpcReflectionService().AllowAnonymous();
         app.MapGrpcService<{{ ProjectName }}GrpcImpl>();
         app.MapGet("/", () => "{{ ProjectName }}");
-        app.MapHealthChecks("/health");
+
+        app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+        {
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "application/json";
+                var result = JsonSerializer.Serialize(new
+                {
+                    status = report.Status.ToString(),
+                    checks = report.Entries.Select(e => new
+                    {
+                        name = e.Key,
+                        status = e.Value.Status.ToString(),
+                        description = e.Value.Description ?? "No description",
+                        duration = e.Value.Duration.ToString()
+                    })
+                });
+                await context.Response.WriteAsync(result);
+            }
+        });
     }
 }
