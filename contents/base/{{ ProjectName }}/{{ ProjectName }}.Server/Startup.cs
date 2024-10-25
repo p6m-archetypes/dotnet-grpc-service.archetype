@@ -5,7 +5,7 @@ using Testcontainers.CockroachDb;
 {% if persistence != 'None' %}
 using {{ ProjectName }}.Persistence.Context;
 using {{ ProjectName }}.Persistence.Repositories;{% endif %}
-using {{ ProjectName }}.Server.Services;
+using {{ ProjectName }}.Server.Grpc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 

@@ -54,6 +54,7 @@ public class {{ EntityName }}Repository
         var totalRecords = await _context.{{ EntityName | pluralize }}.CountAsync();
         
         var {{ entity_name | camel_case | pluralize }} = await _context.{{ EntityName | pluralize }}
+            .OrderBy((i) => i.Name)
             .Skip((request.StartPage - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync();

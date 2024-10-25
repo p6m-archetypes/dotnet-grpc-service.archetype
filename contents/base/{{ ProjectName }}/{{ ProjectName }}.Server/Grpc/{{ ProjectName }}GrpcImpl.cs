@@ -2,7 +2,7 @@ using Grpc.Core;
 using {{ ProjectName }}.API;
 using {{ ProjectName }}.Core;
 
-namespace {{ ProjectName }}.Server.Services;
+namespace {{ ProjectName }}.Server.Grpc;
 
 public class {{ ProjectName }}GrpcImpl : API.{{ ProjectName }}.{{ ProjectName }}Base
 {
