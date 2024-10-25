@@ -7,6 +7,7 @@ using {{ ProjectName }}.Persistence.Context;
 using {{ ProjectName }}.Persistence.Repositories;{% endif %}
 using {{ ProjectName }}.Server.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Prometheus;
 
 
 namespace {{ ProjectName }}.Server;
@@ -100,5 +101,7 @@ public class Startup
                 await context.Response.WriteAsync(result);
             }
         });
+
+        app.MapMetrics();
     }
 }

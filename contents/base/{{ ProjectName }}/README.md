@@ -37,6 +37,7 @@ Next, start the server locally or using Docker. You can verify things are up and
 ```bash
 curl localhost:{{ management-port }}/health
 ```
+
 You can try to create an entity using a gRPC client, like [grpcurl](https://github.com/fullstorydev/grpcurl) (CLI) or [grpcui](https://github.com/fullstorydev/grpcui) (GUI).
 For example,
 
@@ -78,6 +79,14 @@ dotnet run --project {{ ProjectName }}.Server
 Shutdown local database
 ```bash 
 docker-compose down
+```
+
+### Metrics
+Prometheus - [Prometheus](https://github.com/prometheus-net/prometheus-net)
+
+You can verify things are up and running by looking at the [/metrics](http://localhost:{{ management-port }}/metrics) endpoint:
+```bash
+curl localhost:{{ management-port }}/metrics
 ```
 
 ## Modules (UPDATE)
