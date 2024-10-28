@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Serilog;
 
 namespace {{ ProjectName }}.Server;
 
@@ -11,6 +12,15 @@ public class {{ ProjectName }}Server
     public {{ ProjectName }}Server Start()
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Logging.ClearProviders();
+        builder.Logging.AddSerilog();
+        
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(builder.Configuration)
+            .Enrich.FromLogContext()
+            .CreateLogger();
+        builder.Host.UseSerilog();
+
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services);
         app = builder.Build();
@@ -38,7 +48,7 @@ public class {{ ProjectName }}Server
         return this;
     }
 
-     public BookingServiceServer WithRandomPorts()
+     public {{ ProjectName }}Server WithRandomPorts()
     {
         Environment.SetEnvironmentVariable("Kestrel__Endpoints__Grpc__Url", "http://127.0.0.1:0");
         Environment.SetEnvironmentVariable("Kestrel__Endpoints__Http__Url", "http://127.0.0.1:0");
@@ -57,8 +67,6 @@ public class {{ ProjectName }}Server
             .WithArguments(args);
 
         {{ ProjectName }}Server.Start();
-        
-        Console.WriteLine("Application started. Press Ctrl+C to shut down.");
 
         // Simulate waiting for shutdown signal or some other condition
         var cancellationTokenSource = new CancellationTokenSource();
@@ -66,7 +74,6 @@ public class {{ ProjectName }}Server
         // Register an event to stop the app when Ctrl+C or another shutdown signal is received
         Console.CancelKeyPress += (sender, eventArgs) =>
         {
-            Console.WriteLine("Shutting down...");
             eventArgs.Cancel = true; // Prevent the app from terminating immediately
             cancellationTokenSource.Cancel(); // Trigger the stop signal
         };
@@ -83,6 +90,5 @@ public class {{ ProjectName }}Server
 
         // Gracefully stop the application
         {{ ProjectName }}Server.Stop();
-        Console.WriteLine("Application stopped.");
     }
 }
