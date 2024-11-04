@@ -31,6 +31,7 @@ context += set("service-port", 5030);
 context += set("management-port", context["service-port"] + 1);
 context += set("database-port", 26257);
 context += set("debug-port", context["service-port"] + 9);
+context += set("project-language", ".NET");
 
 if ANSWERS.model != () {
   context.model = ANSWERS.model;
@@ -59,7 +60,7 @@ if context["persistence"] == "CockroachDB" {
   }
 }
 
-//render(Archetype("manifests"), context["artifact-id"], context);
+render(Archetype("manifests"), context["artifact-id"], context);
 //render(Archetype("gitignore"), context["artifact-id"], #{ "ignore": ["java"]});
 
 fn default_model(context) {
