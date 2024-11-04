@@ -7,7 +7,9 @@ using {{ ProjectName }}.Persistence.Context;
 using {{ ProjectName }}.Persistence.Repositories;{% endif %}
 using {{ ProjectName }}.Server.Grpc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Prometheus;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 
 namespace {{ ProjectName }}.Server;
@@ -64,6 +66,26 @@ public class Startup
                 failureStatus: HealthStatus.Unhealthy,
                 tags: ["db", "cockroachdb", "sql"]
             ){% endif %};
+
+        services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService("order-service"))
+            .WithMetrics(metrics =>
+            {
+                metrics
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation();
+                metrics.AddOtlpExporter();
+            })
+            .WithTracing(tracing =>
+            {
+                tracing
+                    .AddHttpClientInstrumentation()
+                    .AddAspNetCoreInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation()
+                    .AddGrpcCoreInstrumentation()
+                    .AddOtlpExporter();
+            })
+            ;
     }
         
         
@@ -101,7 +123,5 @@ public class Startup
                 await context.Response.WriteAsync(result);
             }
         });
-
-        app.MapMetrics();
     }
 }

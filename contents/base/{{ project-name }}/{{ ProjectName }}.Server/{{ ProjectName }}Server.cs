@@ -1,25 +1,23 @@
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using OpenTelemetry.Logs;
 using Serilog;
 
 namespace {{ ProjectName }}.Server;
 
 public class {{ ProjectName }}Server
 {
-    private string[] args = new string[0];
+    private string[] args = [];
     private WebApplication? app;
 
     public {{ ProjectName }}Server Start()
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Logging.ClearProviders();
-        builder.Logging.AddSerilog();
+         builder.Host.UseSerilog((content, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(builder.Configuration)
+        );
         
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(builder.Configuration)
-            .Enrich.FromLogContext()
-            .CreateLogger();
-        builder.Host.UseSerilog();
+        builder.Logging.AddOpenTelemetry(logging => logging.AddOtlpExporter());
 
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services);
