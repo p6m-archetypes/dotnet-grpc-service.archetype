@@ -40,7 +40,7 @@ export ARTIFACTORY_TOKEN=$(echo -n "$ARTIFACTORY_USERNAME:$ARTIFACTORY_IDENTITY_
 
 ## NuGet with JFrog Artifactory Setup
 ```bash
-dotnet nuget add source --name "Artifactory" --username ${ARTIFACTORY_USERNAME} --password ${ARTIFACTORY_IDENTITY_TOKEN} --store-password-in-clear-text "https://p6m.jfrog.io/artifactory/api/nuget/{{ solution-name }}-{{ org_name }}-nuget"
+dotnet nuget add source --name "Artifactory" --username ${ARTIFACTORY_USERNAME} --password ${ARTIFACTORY_IDENTITY_TOKEN} --store-password-in-clear-text "https://p6m.jfrog.io/artifactory/api/nuget/{{ org_name }}-{{ solution-name }}-nuget"
 ```
 
 ## Running the Server
