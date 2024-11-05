@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>{{ ProjectName }}.API</PackageId>
-    <Version>1.0.0</Version>
     <Description>{{ project-title }} :: API</Description>
   </PropertyGroup>
   

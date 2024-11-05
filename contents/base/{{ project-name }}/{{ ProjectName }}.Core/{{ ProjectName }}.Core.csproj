@@ -4,7 +4,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>{{ ProjectName }}.Core</PackageId>
-    <Version>1.0.0</Version>
     <Description>{{ project-title }} :: Core</Description>
   </PropertyGroup>
 
