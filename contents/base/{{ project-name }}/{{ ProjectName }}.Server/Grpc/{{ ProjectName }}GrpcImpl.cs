@@ -22,26 +22,32 @@ public class {{ ProjectName }}GrpcImpl : API.{{ ProjectName }}.{{ ProjectName }}
 
     public override Task<Create{{ EntityName }}Response> Create{{ EntityName }}({{ EntityName }}Dto request, ServerCallContext context)
     {
-        Logger.Information("Create{{ EntityName }} request: {@request}", request);
+        Logger.Information("Create{{ EntityName }} request: {@Request}", request);
         return _service.Create{{ EntityName }}(request);
     }
 
     public override Task<Get{{ EntityName }}Response> Get{{ EntityName }}(Get{{ EntityName }}Request request, ServerCallContext context)
     {
-        Logger.Information("Get{{ EntityName }} request: {@request}", request);
+        Logger.Information("Get{{ EntityName }} request: {@Request}", request);
         return _service.Get{{ EntityName }}(request);
     }
 
     public override Task<Get{{ EntityName | pluralize }}Response> Get{{ EntityName | pluralize }}(Get{{ EntityName | pluralize }}Request request, ServerCallContext context)
     {
-        Logger.Information("Get{{ EntityName | pluralize }} request: {@request}", request);
+        Logger.Information("Get{{ EntityName | pluralize }} request: {@Request}", request);
         return _service.Get{{ EntityName | pluralize}}(request);
     }
 
     public override Task<Update{{ EntityName }}Response> Update{{ EntityName }}({{ EntityName }}Dto request, ServerCallContext context)
     {
-        Logger.Information("Update{{ EntityName }} request: {@request}", request);
+        Logger.Information("Update{{ EntityName }} request: {@Request}", request);
         return _service.Update{{ EntityName }}(request);
+    }
+
+    public override Task<Delete{{ EntityName }}Response> Delete{{ EntityName }}(Delete{{ EntityName }}Request request, ServerCallContext context)
+    {
+        Logger.Information("Delete{{ EntityName }} request: {@Request}", request);
+        return _service.Delete{{ EntityName }}(request);
     }
 {% endfor %}
 }

@@ -6,6 +6,8 @@
 .DS_Store
 .idea 
 .git 
+.sonarqube
+**/coverage.opencover.xml
 
 # User-specific files
 *.rsuser

@@ -4,6 +4,7 @@
     Task<Get{{ entity_key | pascal_case | pluralize }}Response> Get{{ entity_key | pascal_case | pluralize }}(Get{{ entity_key | pascal_case | pluralize }}Request request);
     Task<Get{{ entity_key | pascal_case }}Response> Get{{ entity_key | pascal_case }}(Get{{ entity_key | pascal_case }}Request request);
     Task<Update{{ entity_key | pascal_case }}Response> Update{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto {{ entity_key | camel_case }});
+    Task<Delete{{ entity_key | pascal_case }}Response> Delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request request);
 {%- endmacro %}
 
 
@@ -135,4 +136,17 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
         return new Update{{ entity_key | pascal_case }}Response();{% endif %}
     }
 
+    public async Task<Delete{{ entity_key | pascal_case }}Response> Delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request request)
+        {{'{'}}{% if persistence != 'None' %}
+            var {{ entity_key | camel_case }} = await _{{ entity_key | camel_case }}Repository.FindByIdAsync(Guid.Parse(request.Id));
+            if ({{ entity_key | camel_case }} == null)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, "{{ entity_key | pascal_case }} not found"));
+            }
+
+            _{{ entity_key | camel_case }}Repository.Delete({{ entity_key | camel_case }});
+    
+            return new Delete{{ entity_key | pascal_case }}Response{Deleted = true};{% else %}
+            return new Delete{{ entity_key | pascal_case }}Response(Deleted = false);{% endif %}
+        }
 {%- endmacro %}

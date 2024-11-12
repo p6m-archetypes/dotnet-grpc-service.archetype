@@ -3,7 +3,8 @@
     rpc Create{{ entity_key | pascal_case }} ({{ entity_key | pascal_case }}Dto) returns (Create{{ entity_key | pascal_case }}Response);
     rpc Get{{ entity_key | pascal_case | pluralize }} (Get{{ entity_key | pascal_case | pluralize }}Request) returns (Get{{ entity_key | pascal_case | pluralize }}Response);
     rpc Get{{ entity_key | pascal_case }} (Get{{ entity_key | pascal_case }}Request) returns (Get{{ entity_key | pascal_case }}Response);
-    rpc Update{{ entity_key | pascal_case }} ({{ entity_key | pascal_case }}Dto) returns (Update{{ entity_key | pascal_case }}Response);{%- endmacro %}
+    rpc Update{{ entity_key | pascal_case }} ({{ entity_key | pascal_case }}Dto) returns (Update{{ entity_key | pascal_case }}Response);
+    rpc Delete{{ entity_key | pascal_case }} (Delete{{ entity_key | pascal_case }}Request) returns (Delete{{ entity_key | pascal_case }}Response);{%- endmacro %}
 
 {% macro dtos(entity_key, entity, model) -%}
 message {{ entity_key | pascal_case }}Dto {
@@ -40,4 +41,12 @@ message Update{{ entity_key | pascal_case }}Response {
 
 message Create{{ entity_key | pascal_case }}Response {
     {{ entity_key | pascal_case }}Dto {{ entity_key | snake_case }} = 1;
+}
+
+message Delete{{ entity_key | pascal_case }}Request {
+    string id = 1;
+}
+
+message Delete{{ entity_key | pascal_case }}Response {
+    bool deleted = 1;
 }{%- endmacro %}

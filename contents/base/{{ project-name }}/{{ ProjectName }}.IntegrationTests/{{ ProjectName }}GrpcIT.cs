@@ -1,3 +1,4 @@
+using Grpc.Core;
 using {{ ProjectName }}.API;
 using {{ ProjectName }}.Client;
 using Xunit.Abstractions;
@@ -44,7 +45,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
         
         //Assert
         
-        Assert.Equal(beforeTotal + 1, response.{{ EntityName }}s.Count);
+        Assert.Equal(beforeTotal + 1, response.TotalElements);
     }
     
     [Fact]
@@ -61,6 +62,52 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
         var dto = response.{{ EntityName }};
         Assert.NotNull(dto.Id);
         Assert.Equal(request.Name, dto.Name);
+    }
+
+    [Fact]
+    public async void Test_Update{{ EntityName }}()
+    {
+        //Arrange
+        var request = new {{ EntityName }}Dto { Name = Guid.NewGuid().ToString() };
+        var createResponse = await _client.Create{{ EntityName }}(request);
+    
+        //Act
+        var response = await _client.Update{{ EntityName }}(new {{ EntityName }}Dto() {Id = createResponse.{{ EntityName }}.Id, Name = "Updated"});
+        
+        //Assert
+        var dto = response.{{ EntityName }};
+        Assert.NotNull(dto.Id);
+        Assert.Equal("Updated", response.{{ EntityName }}.Name);
+    }
+    
+    [Fact]
+    public async void Test_Delete{{ EntityName }}()
+    {
+        //Arrange
+        var request = new {{ EntityName }}Dto { Name = Guid.NewGuid().ToString() };
+        var createResponse = await _client.Create{{ EntityName }}(request);
+    
+        //Act
+        var response = await _client.Delete{{ EntityName }}(new Delete{{ EntityName }}Request{Id = createResponse.{{ EntityName }}.Id});
+        
+        //Assert
+        Assert.True(response.Deleted);
+    }
+
+    [Fact]
+    public async void Test_Delete{{ EntityName }}_NotFound()
+    {
+        //Arrange
+
+        //Act
+        var exception = await Assert.ThrowsAsync<RpcException>(async () => 
+        {
+            await _client.Delete{{ EntityName }}(new Delete{{ EntityName }}Request{Id = Guid.NewGuid().ToString()});
+        });
+       
+        //Assert
+        Assert.Equal(StatusCode.NotFound, exception.StatusCode);
+        Assert.Equal("{{ EntityName }} not found", exception.Status.Detail);
     }
 {% endfor %}
 }

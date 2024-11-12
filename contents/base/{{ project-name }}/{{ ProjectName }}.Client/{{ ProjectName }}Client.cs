@@ -36,5 +36,10 @@ public class {{ ProjectName }}Client : I{{ ProjectName }}
     public async Task<Update{{ EntityName }}Response> Update{{ EntityName }}({{ EntityName }}Dto {{ entityName }}) {
         return await stub.Update{{ EntityName }}Async({{ entityName }});
     }
+
+    public async Task<Delete{{ EntityName }}Response> Delete{{ EntityName }}(Delete{{ EntityName }}Request request) {
+        return await stub.Delete{{ EntityName }}Async(request);
+    }
+    
 {% endfor %}
 }
