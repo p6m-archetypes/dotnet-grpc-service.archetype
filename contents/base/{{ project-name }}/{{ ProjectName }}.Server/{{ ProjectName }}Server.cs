@@ -67,23 +67,24 @@ public class {{ ProjectName }}Server
         {{ ProjectName }}Server.Start();
 
         // Simulate waiting for shutdown signal or some other condition
-        var cancellationTokenSource = new CancellationTokenSource();
+        using (var cancellationTokenSource = new CancellationTokenSource())
+        {
+            // Register an event to stop the app when Ctrl+C or another shutdown signal is received
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true; // Prevent the app from terminating immediately
+                cancellationTokenSource.Cancel(); // Trigger the stop signal
+            };
 
-        // Register an event to stop the app when Ctrl+C or another shutdown signal is received
-        Console.CancelKeyPress += (sender, eventArgs) =>
-        {
-            eventArgs.Cancel = true; // Prevent the app from terminating immediately
-            cancellationTokenSource.Cancel(); // Trigger the stop signal
-        };
-
-        try
-        {
-            // Wait indefinitely (or for a shutdown signal) by awaiting on the task
-            await Task.Delay(Timeout.Infinite, cancellationTokenSource.Token);
-        }
-        catch (TaskCanceledException)
-        {
-            // The delay task is canceled when a shutdown signal is received
+            try
+            {
+                // Wait indefinitely (or for a shutdown signal) by awaiting on the task
+                await Task.Delay(Timeout.Infinite, cancellationTokenSource.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                // The delay task is canceled when a shutdown signal is received
+            }
         }
 
         // Gracefully stop the application
