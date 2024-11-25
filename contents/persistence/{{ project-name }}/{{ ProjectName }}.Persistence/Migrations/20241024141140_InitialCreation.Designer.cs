@@ -27,6 +27,7 @@ namespace {{ ProjectName }}.Persistence.Migrations
 {%- for entity_key in model.entities -%}
 {%- set EntityName = entity_key | pascal_case -%}
 {%- set entityName = entity_key | camel_case %}
+{%- set entity_name = entity_key | snake_case %}
             modelBuilder.Entity("{{ ProjectName }}.Persistence.Entities.{{ EntityName }}Entity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -49,7 +50,7 @@ namespace {{ ProjectName }}.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("{{ entityName }}");
+                    b.ToTable("{{ entity_name }}");
                 });
 {% endfor %}
 #pragma warning restore 612, 618

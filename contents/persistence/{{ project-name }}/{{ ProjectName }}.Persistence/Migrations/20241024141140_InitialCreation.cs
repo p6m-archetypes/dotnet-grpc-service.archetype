@@ -14,8 +14,9 @@ namespace {{ ProjectName }}.Persistence.Migrations
 {%- for entity_key in model.entities -%}
 {%- set EntityName = entity_key | pascal_case -%}
 {%- set entityName = entity_key | camel_case %}
+{%- set entity_name = entity_key | snake_case %}
             migrationBuilder.CreateTable(
-                name: "{{ entityName }}",
+                name: "{{ entity_name }}",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -25,7 +26,7 @@ namespace {{ ProjectName }}.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_{{ entityName }}", x => x.id);
+                    table.PrimaryKey("PK_{{ entity_name }}", x => x.id);
                 });
 {% endfor %}
         }
@@ -36,8 +37,9 @@ namespace {{ ProjectName }}.Persistence.Migrations
 {%- for entity_key in model.entities -%}
 {%- set EntityName = entity_key | pascal_case -%}
 {%- set entityName = entity_key | camel_case %}
+{%- set entity_name = entity_key | snake_case %}
             migrationBuilder.DropTable(
-                name: "{{ entityName }}");
+                name: "{{ entity_name }}");
 {% endfor %}
         }
     }
