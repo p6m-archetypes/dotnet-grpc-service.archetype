@@ -17,5 +17,4 @@ public class {{ ProjectName }}Core : I{{ ProjectName }}
     {%- for entity_key in model.entities %}
     {{ dotnet.core_implementation_methods(entity_key, model.entities[entity_key], model) }}
     {% endfor %}
-
 }

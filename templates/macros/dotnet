@@ -54,7 +54,8 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
             Name = request.Name
         };
 
-        await _{{ entity_key | camel_case }}Repository.SaveAsync({{ entity_key | camel_case }});
+        _{{ entity_key | camel_case }}Repository.Save({{ entity_key | camel_case }});
+        await _{{ entity_key | camel_case }}Repository.SaveChangesAsync();
         
         return new Create{{ entity_key | pascal_case }}Response
         {
@@ -123,7 +124,8 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
 
         entity.Name = {{ entity_key | camel_case }}.Name;
 
-        await _{{ entity_key | camel_case }}Repository.UpdateAsync(entity);
+        _{{ entity_key | camel_case }}Repository.Update(entity);
+        await _{{ entity_key | camel_case }}Repository.SaveChangesAsync();
 
         return new Update{{ entity_key | pascal_case }}Response
         {
@@ -137,16 +139,16 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
     }
 
     public async Task<Delete{{ entity_key | pascal_case }}Response> Delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request request)
-        {{'{'}}{% if persistence != 'None' %}
-            var {{ entity_key | camel_case }} = await _{{ entity_key | camel_case }}Repository.FindByIdAsync(Guid.Parse(request.Id));
-            if ({{ entity_key | camel_case }} == null)
-            {
-                throw new RpcException(new Status(StatusCode.NotFound, "{{ entity_key | pascal_case }} not found"));
-            }
-
-            _{{ entity_key | camel_case }}Repository.Delete({{ entity_key | camel_case }});
-    
-            return new Delete{{ entity_key | pascal_case }}Response{Deleted = true};{% else %}
-            return new Delete{{ entity_key | pascal_case }}Response(Deleted = false);{% endif %}
+    {{'{'}}{% if persistence != 'None' %}
+        var {{ entity_key | camel_case }} = await _{{ entity_key | camel_case }}Repository.FindByIdAsync(Guid.Parse(request.Id));
+        if ({{ entity_key | camel_case }} == null)
+        {
+            throw new RpcException(new Status(StatusCode.NotFound, "{{ entity_key | pascal_case }} not found"));
         }
+
+        _{{ entity_key | camel_case }}Repository.Delete({{ entity_key | camel_case }});
+
+        return new Delete{{ entity_key | pascal_case }}Response{Deleted = true};{% else %}
+        return new Delete{{ entity_key | pascal_case }}Response(Deleted = false);{% endif %}
+    }
 {%- endmacro %}

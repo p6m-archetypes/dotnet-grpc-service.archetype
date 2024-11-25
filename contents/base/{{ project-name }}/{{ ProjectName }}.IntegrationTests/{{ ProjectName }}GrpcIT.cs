@@ -16,7 +16,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
 {%- set EntityName = entity_key | pascal_case -%}
 {%- set entityName = entity_key | camel_case %}
     [Fact]
-    public async void Test_Create{{ EntityName}}()
+    public async Task Test_Create{{ EntityName}}()
     {
         //Arrange
     
@@ -31,7 +31,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
     }
     
     [Fact]
-    public async void Test_Get{{ EntityName }}s()
+    public async Task Test_Get{{ EntityName }}s()
     {
         testOutputHelper.WriteLine("Test_Get{{ EntityName }}s");
         
@@ -49,7 +49,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
     }
     
     [Fact]
-    public async void Test_Get{{ EntityName }}()
+    public async Task Test_Get{{ EntityName }}()
     {
         //Arrange
         var request = new {{ EntityName }}Dto { Name = Guid.NewGuid().ToString() };
@@ -65,7 +65,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
     }
 
     [Fact]
-    public async void Test_Update{{ EntityName }}()
+    public async Task Test_Update{{ EntityName }}()
     {
         //Arrange
         var request = new {{ EntityName }}Dto { Name = Guid.NewGuid().ToString() };
@@ -81,7 +81,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
     }
     
     [Fact]
-    public async void Test_Delete{{ EntityName }}()
+    public async Task Test_Delete{{ EntityName }}()
     {
         //Arrange
         var request = new {{ EntityName }}Dto { Name = Guid.NewGuid().ToString() };
@@ -95,7 +95,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
     }
 
     [Fact]
-    public async void Test_Delete{{ EntityName }}_NotFound()
+    public async Task Test_Delete{{ EntityName }}_NotFound()
     {
         //Arrange
 

@@ -4,12 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("{{ entity_name }}")]
-public class {{ EntityName }}Entity
+public class {{ EntityName }}Entity : AbstractEntity<Guid>
 {
-    [Key]
-    [Column("id")]
-    public Guid Id { get; set; }
-
     [Column("name")]
     [Required]
     public string? Name { get; set; }

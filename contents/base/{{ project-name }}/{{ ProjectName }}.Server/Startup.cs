@@ -68,7 +68,7 @@ public class Startup
             ){% endif %};
 
         services.AddOpenTelemetry()
-            .ConfigureResource(resource => resource.AddService("order-service"))
+            .ConfigureResource(resource => resource.AddService("{{ project-name }}"))
             .WithMetrics(metrics =>
             {
                 metrics
