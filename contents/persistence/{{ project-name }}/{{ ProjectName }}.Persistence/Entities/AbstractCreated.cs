@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace {{ ProjectName }}.Persistence.Entities;
 
-public class AbstractEntity <TEntityId> : AbstractModified
+public class AbstractCreated
 {
-    [Key]
-    [Column("id")]
+    
+    [Column("created")]
     [Required]
-    public TEntityId Id { get; set; }
+    public DateTime Created { get; set; }
     
 }

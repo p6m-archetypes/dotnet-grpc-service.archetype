@@ -55,7 +55,7 @@ public  abstract class BaseRepository<TEntity, TEntityId>
         var totalRecords = await DbContext.Set<TEntity>().CountAsync();
         
         var entities = await DbContext.Set<TEntity>()
-            .OrderBy((i) => i.Id)
+            .OrderBy((i) => i.Created)
             .Skip((request.StartPage - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync();
