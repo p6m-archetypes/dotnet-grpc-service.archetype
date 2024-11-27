@@ -75,6 +75,7 @@ public class Startup
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation();
                 metrics.AddOtlpExporter();
+                metrics.AddPrometheusExporter();
             })
             .WithTracing(tracing =>
             {
@@ -104,6 +105,7 @@ public class Startup
         app.MapGrpcService<{{ ProjectName }}GrpcImpl>();
         app.MapGet("/", () => "{{ ProjectName }}");
 
+        app.MapPrometheusScrapingEndpoint("/metrics");
         app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
         {
             ResponseWriter = async (context, report) =>
