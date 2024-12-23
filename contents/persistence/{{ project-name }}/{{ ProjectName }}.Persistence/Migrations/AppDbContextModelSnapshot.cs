@@ -32,10 +32,22 @@ namespace {{ ProjectName }}.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modified");
 
                     b.HasKey("Id");
 
