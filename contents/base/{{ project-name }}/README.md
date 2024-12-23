@@ -80,6 +80,11 @@ dotnet ef migrations add InitialCreation  --project {{ ProjectName }}.Persistenc
 ```bash
 dotnet ef database update --project {{ ProjectName }}.Persistence -s {{ ProjectName }}.Server
 ```
+
+### Remove DB migrations
+```bash
+dotnet ef migrations remove --project {{ ProjectName }}.Persistence -s {{ ProjectName }}.Server
+```
 {% endif %}
 
 ## Local
@@ -97,6 +102,16 @@ dotnet run --project {{ ProjectName }}.Server
 Shutdown local database
 ```bash 
 docker-compose down
+```
+
+### Pack NuGet packages locally
+```sh
+dotnet pack -c Release -o ~/.nuget_local
+```
+
+### Pull from local repository
+```sh
+dotnet add package {{ ProjectName }}.Client -v 1.0.0 -s ~/.nuget_local
 ```
 
 ### Metrics
