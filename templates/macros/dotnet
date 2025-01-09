@@ -147,6 +147,7 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
         }
 
         _{{ entity_key | camel_case }}Repository.Delete({{ entity_key | camel_case }});
+        await _{{ entity_key | camel_case }}Repository.SaveChangesAsync();
 
         return new Delete{{ entity_key | pascal_case }}Response{Deleted = true};{% else %}
         return new Delete{{ entity_key | pascal_case }}Response(Deleted = false);{% endif %}

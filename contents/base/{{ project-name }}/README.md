@@ -43,6 +43,16 @@ export ARTIFACTORY_TOKEN=$(echo -n "$ARTIFACTORY_USERNAME:$ARTIFACTORY_IDENTITY_
 dotnet nuget add source --name "Artifactory" --username ${ARTIFACTORY_USERNAME} --password ${ARTIFACTORY_IDENTITY_TOKEN} --store-password-in-clear-text "https://p6m.jfrog.io/artifactory/api/nuget/{{ org_name }}-{{ solution-name }}-nuget"
 ```
 
+### Add local NuGet repository
+```bash
+dotnet nuget add source ~/.nuget_local -n Local
+```
+
+### List NuGet repositories
+```bash
+dotnet nuget list source
+```
+
 ## Running the Server
 This server accepts connections on the following ports:
 - {{ service-port }}: used for application gRPC Service traffic.
@@ -87,7 +97,7 @@ dotnet ef migrations remove --project {{ ProjectName }}.Persistence -s {{ Projec
 ```
 {% endif %}
 
-## Local
+## Running the Server Locally
 Run Database dependencies with `docker-compose`
 ```bash 
 docker-compose up -d
