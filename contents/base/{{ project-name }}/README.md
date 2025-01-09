@@ -98,16 +98,16 @@ dotnet ef migrations remove --project {{ ProjectName }}.Persistence -s {{ Projec
 {% endif %}
 
 ## Running the Server Locally
-Run Database dependencies with `docker-compose`
-```bash 
-docker-compose up -d
-```
-
 From the project root, run the server:
 ```bash
 dotnet run --project {{ ProjectName }}.Server
 ```
 
+### Running DB locally with persistent state
+Run Database dependencies with `docker-compose`
+```bash 
+docker-compose up -d
+```
 
 Shutdown local database
 ```bash 
