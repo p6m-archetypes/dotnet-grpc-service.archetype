@@ -1,4 +1,4 @@
-# Spring Boot Service Archetype
+# .NET gRPC Service Archetype
 
 ## Usage
 
