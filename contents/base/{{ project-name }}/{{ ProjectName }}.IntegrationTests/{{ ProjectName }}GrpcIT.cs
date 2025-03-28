@@ -31,17 +31,17 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
     }
     
     [Fact]
-    public async Task Test_Get{{ EntityName }}s()
+    public async Task Test_Get{{ EntityName | pluralize }}()
     {
-        testOutputHelper.WriteLine("Test_Get{{ EntityName }}s");
+        testOutputHelper.WriteLine("Test_Get{{ EntityName | pluralize }}");
         
         //Arrange
-        var beforeTotal = (await _client.Get{{ EntityName }}s(new Get{{ EntityName }}sRequest {StartPage = 1, PageSize = 4})).TotalElements;
+        var beforeTotal = (await _client.Get{{ EntityName | pluralize }}(new Get{{ EntityName | pluralize }}Request {StartPage = 1, PageSize = 4})).TotalElements;
         
         //Act
         var createRequest = new {{ EntityName }}Dto { Name = Guid.NewGuid().ToString() };
         await _client.Create{{ EntityName }}(createRequest);
-        var response = await _client.Get{{ EntityName }}s(new Get{{ EntityName }}sRequest {StartPage = 1, PageSize = 4});
+        var response = await _client.Get{{ EntityName | pluralize }}(new Get{{ EntityName | pluralize }}Request {StartPage = 1, PageSize = 4});
         
         //Assert
         
