@@ -12,15 +12,15 @@ Generated from the [.NET gRPC Service Archetype](https://github.com/p6m-archetyp
 - [Overview](#overview)
   - [Project Structure / Modules](#project-structure--modules)
   - [Build System](#build-system)
-- [Running the Server](#running-the-server)
-  - [Running the Server Locally](#running-the-server-locally)
+- [Build](#build)
+- [Run Server](#run-server)
   - [Using your service's APIs](#using-your-services-apis)
+- [Management API](#management-api)
+  - [Health Checks](#health-checks)
+  - [Metrics](#metrics)
 {% if persistence != 'None' %}
   - [DB migrations](#db-migrations)
 {% endif %}
-- [Package management](#package-management)
-  - [For Local, Offline Development](#for-local-offline-development)
-- [Metrics](#metrics)
 - [Contributions](#contributions)
 
 ## Prereqs
@@ -71,35 +71,20 @@ This project uses [dotnet](https://learn.microsoft.com/en-us/dotnet/core/tools/d
 | run     | Runs the application from source                   |
 | test    | Runs tests using a test runner                     |
 
-## Running the Server
-This server accepts connections on the following ports:
-- {{ service-port }}: used for application gRPC Service traffic.
-- {{ management-port }}: used to monitor the application over HTTP (see [Actuator endpoints](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints)).
-- {{ database-port }}: exposes the ephemeral database port
-- {{ debug-port }}: remote debugging port
+## Build
+```bash
+dotnet build
+```
 
-### Running the Server Locally
+## Run Server
 Start the server locally or using Docker. <br> From the project root, run the server:
 ```bash
 dotnet run --project {{ ProjectName }}.Server
 ```
-
-Verify things are up and running by looking at the [/health](http://localhost:{{ management-port }}/health) endpoint:
-```bash
-curl localhost:{{ management-port }}/health
-```
-
-
-#### Running DB locally with persistent state
-Run Database dependencies with `docker-compose`
-```bash 
-docker-compose up -d
-```
-
-Shutdown local database
-```bash 
-docker-compose down
-```
+This server accepts connections on the following ports:
+- {{ service-port }}: used for application gRPC Service traffic.
+- {{ management-port }}: used to monitor the application over HTTP.
+- {{ database-port }}: exposes the ephemeral database port
 
 ### Using your service's APIs
 
@@ -116,6 +101,33 @@ grpcurl -plaintext -d '{"start_page": "1", "page_size": "5"}' localhost:{{ servi
     {{ root_package }}.grpc.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix }}s
 ```
 {% if persistence != 'None' %}
+
+### Running DB locally with persistent state
+Run Database dependencies with `docker-compose`
+```bash 
+docker-compose up -d
+```
+
+Shutdown local database
+```bash 
+docker-compose down
+```
+
+
+## Management API
+### Health Checks
+Verify things are up and running by looking at the [/health](http://localhost:{{ management-port }}/health) endpoint:
+```bash
+curl localhost:{{ management-port }}/health
+```
+## Metrics
+Prometheus - [Prometheus](https://github.com/prometheus-net/prometheus-net)
+
+[/metrics](http://localhost:{{ management-port }}/metrics) endpoint:
+```bash
+curl localhost:{{ management-port }}/metrics
+```
+
 ## DB migrations
 ### Create DB Migration
 ```bash
@@ -133,35 +145,6 @@ dotnet ef migrations remove --project {{ ProjectName }}.Persistence -s {{ Projec
 ```
 {% endif %}
 
-## Package management
-### List NuGet repositories
-```bash
-dotnet nuget list source
-```
-
-### For Local, Offline Development
-#### Pack NuGet packages locally
-```sh
-dotnet pack -c Release -o ~/.nuget_local
-```
-
-#### Add local NuGet repository
-```bash
-dotnet nuget add source ~/.nuget_local -n Local
-```
-
-#### Pull from local repository
-```sh
-dotnet add package {{ ProjectName }}.Client -v 1.0.0 -s ~/.nuget_local
-```
-
-## Metrics
-Prometheus - [Prometheus](https://github.com/prometheus-net/prometheus-net)
-
-You can verify things are up and running by looking at the [/metrics](http://localhost:{{ management-port }}/metrics) endpoint:
-```bash
-curl localhost:{{ management-port }}/metrics
-```
 
 ## Contributions
 **// TODO:** Add description of how you would like issues to be reported and people to reach out.
