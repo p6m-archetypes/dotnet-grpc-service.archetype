@@ -100,7 +100,6 @@ Get{{ ProjectPrefix }}s
 grpcurl -plaintext -d '{"start_page": "1", "page_size": "5"}' localhost:{{ service-port }} \
     {{ root_package }}.grpc.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix }}s
 ```
-{% if persistence != 'None' %}
 
 ### Running DB locally with persistent state
 Run Database dependencies with `docker-compose`
@@ -128,6 +127,7 @@ Prometheus - [Prometheus](https://github.com/prometheus-net/prometheus-net)
 curl localhost:{{ management-port }}/metrics
 ```
 
+{% if persistence != 'None' %}
 ## DB migrations
 ### Create DB Migration
 ```bash
