@@ -19,7 +19,7 @@ Generated from the [.NET gRPC Service Archetype](https://github.com/p6m-archetyp
   - [Health Checks](#health-checks)
   - [Metrics](#metrics)
 {% if persistence != 'None' %}
-  - [DB migrations](#db-migrations)
+- [DB migrations](#db-migrations)
 {% endif %}
 - [Contributions](#contributions)
 
@@ -98,7 +98,7 @@ grpcurl -plaintext -d '{"name": "test"}' localhost:{{ service-port }} \
 Get{{ ProjectPrefix }}s
 ```bash
 grpcurl -plaintext -d '{"start_page": "1", "page_size": "5"}' localhost:{{ service-port }} \
-    {{ root_package }}.grpc.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix }}s
+    {{ root_package }}.grpc.{{ ProjectPrefix }}{{ ProjectSuffix }}/Get{{ ProjectPrefix | pluralize}}
 ```
 
 ### Running DB locally with persistent state
