@@ -14,7 +14,7 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
 
 {%- for entity_key in model.entities -%}
 {%- set EntityName = entity_key | pascal_case -%}
-{%- set entityName = entity_key | camel_case %}
+{%- set entityName = entity_key | camel_case %}{% if persistence != 'None' %}
     [Fact]
     public async Task Test_Create{{ EntityName}}()
     {
@@ -109,5 +109,5 @@ public class {{ ProjectName }}GrpcIt(ITestOutputHelper testOutputHelper, Applica
         Assert.Equal(StatusCode.NotFound, exception.StatusCode);
         Assert.Equal("{{ EntityName }} not found", exception.Status.Detail);
     }
-{% endfor %}
+{% endif %} {% endfor %}
 }

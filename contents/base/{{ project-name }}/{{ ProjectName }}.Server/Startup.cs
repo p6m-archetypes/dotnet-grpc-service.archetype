@@ -1,8 +1,7 @@
 using System.Text.Json;
 {% if persistence != 'None' %}using Microsoft.EntityFrameworkCore;{% endif %}
 using {{ ProjectName }}.Core;
-using Testcontainers.CockroachDb;
-{% if persistence != 'None' %}
+{% if persistence != 'None' %}using Testcontainers.CockroachDb;
 using {{ ProjectName }}.Persistence.Context;
 using {{ ProjectName }}.Persistence.Repositories;{% endif %}
 using {{ ProjectName }}.Server.Grpc;
@@ -92,13 +91,13 @@ public class Startup
         
     public void Configure(WebApplication app)
     {
-        //Run DB Migrations
+        {% if persistence != 'None' %}//Run DB Migrations
         using (var scope = app.Services.CreateScope())
         {
             var servicesProvider = scope.ServiceProvider;
             var context = servicesProvider.GetRequiredService<AppDbContext>();
             context.Database.Migrate();  // Apply pending migrations
-        }
+        }{% endif %}
 
         // Configure the HTTP request pipeline.
         app.MapGrpcReflectionService().AllowAnonymous();

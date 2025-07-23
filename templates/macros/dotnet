@@ -150,6 +150,6 @@ final {{ entity_key | pascal_case }}Repository {{ entity_key | camel_case }}Repo
         await _{{ entity_key | camel_case }}Repository.SaveChangesAsync();
 
         return new Delete{{ entity_key | pascal_case }}Response{Deleted = true};{% else %}
-        return new Delete{{ entity_key | pascal_case }}Response(Deleted = false);{% endif %}
+        return new Delete{{ entity_key | pascal_case }}Response{Deleted = false};{% endif %}
     }
 {%- endmacro %}
